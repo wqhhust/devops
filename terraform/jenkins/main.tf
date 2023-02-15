@@ -87,3 +87,19 @@ resource "aws_instance" "jenkins" {
     Name = "jenkins"
   }
 }
+
+
+resource "local_file" "inventory_for_ansible" {
+  filename = "inventory"
+  content  = templatefile("inventory_template", {
+     ip = aws_instance.jenkins.public_ip
+  })
+  file_permission="600"
+}
+
+
+resource "local_file" "ssh_to_jenkins" {
+  filename = "ssh_to_jenkins"
+  content  = "ssh -i daniel_key.pem  -oStrictHostKeyChecking=no ubuntu@${aws_instance.jenkins.public_ip}"
+  file_permission="700"
+}
