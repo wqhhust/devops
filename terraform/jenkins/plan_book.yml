@@ -1,0 +1,6 @@
+- name: Install plugin
+  jenkins_plugin:
+    name: build-pipeline-plugin
+    params: "test"
+    url_password: test
+    url: http://52.15.178.45:8080
