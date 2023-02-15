@@ -16,11 +16,22 @@
     - pause:
         minutes: 1
 
-    - name: Install Plugin "active-directory"
+    - name: Install Jenkins plugins
       jenkins_plugin:
         name: "{{ item }}"
         url_username: "test"
         url_password: "test"
-        with_items:
+      with_items:
         - artifactory
         - build-pipeline-plugin
+        - kubernetes
+        - mailer
+        - sonar
+        - maven-plugin
+        - ec2
+        - build-pipeline-plugin
+        - blueocean
+        - git
+        - workflow-aggregator
+        - perfpublisher
+        - github
