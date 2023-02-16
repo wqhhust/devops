@@ -24,7 +24,7 @@ instance.save()
 disableScript.createNewFile()
 
 
-File disableScript = new File(Jenkins.get().getRootDir(), ".disable-create-vagrant-userpass-credential")
+disableScript = new File(Jenkins.get().getRootDir(), ".disable-create-vagrant-userpass-credential")
 if (disableScript.exists()) {
     return
 }
