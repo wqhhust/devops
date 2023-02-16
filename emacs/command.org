@@ -1,0 +1,6 @@
+#+title: Command
+
+* search project quickly
+- search the word under the cursor: SPC + *
+- search the whole project withou populate a default search string: SPC + /,  or SPC + s + p
+- search under the same folder: SPC + s + d
