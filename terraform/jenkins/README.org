@@ -2,6 +2,7 @@
    1. Provision an EC2 with ubuntu 20.04 image, and use cloud-init (user_data) to install jenkins, aws and ansible.
       It will also create a private key and inventory file for ansible.
       #+begin_src bash
+      aws configure # to set up the credential to connect to AWS
       terraform init
       terraform change
       terraform apply
