@@ -1,13 +1,11 @@
 *  Setup Jenkins on EC2 using terraform
    1. Provision an EC2 with ubuntu 20.04 image, and use cloud-init (user_data) to install jenkins, aws and ansible.
+      It will also create a private key and inventory file for ansible.
       #+begin_src bash
       terraform init
       terraform change
       terraform apply
       #+end_src
-
-
-      It will also create a private key and inventory file for ansible.
 
    2. Copy file from local to remote EC2
 
