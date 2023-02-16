@@ -1,8 +1,0 @@
-- name: Playbook to copy files
-  hosts:
-    - prod
-  tasks:
-  - name: copy yml to install jenkins plugin
-    ansible.builtin.copy:
-       src: jenkins_plugin.yml
-       dest: /tmp/jenkins_plugin.yml
