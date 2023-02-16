@@ -2,5 +2,26 @@
 
 * search project quickly
 - search the word under the cursor: SPC + *
-- search the whole project withou populate a default search string: SPC + /,  or SPC + s + p
+- search the whole project without populating a default search string: SPC + /,  or SPC + s + p
 - search under the same folder: SPC + s + d
+
+* configuration for emacs
+#+begin_src elisp
+
+(package! transient
+      :pin "c2bdf7e12c530eb85476d3aef317eb2941ab9440"
+      :recipe (:host github :repo "magit/transient"))
+
+(package! with-editor
+          :pin "bbc60f68ac190f02da8a100b6fb67cf1c27c53ab"
+          :recipe (:host github :repo "magit/with-editor"))
+
+(defun save-all ()
+  (interactive)
+  (save-some-buffers t))
+
+(add-hook 'focus-out-hook 'save-all)
+
+(global-set-key [f2] 'consult-recent-file)
+
+#+end_src
