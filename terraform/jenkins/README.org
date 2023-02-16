@@ -23,5 +23,5 @@
 
       TODO
       - create a second EC2 with docker installed, then let jenkins to use it to build docker.
-      - fully automate jenkins installation by using jcasc
       - build a docker from a repo and deploy to aws ECR
+      - use grafana prometheus to monitor jenkins

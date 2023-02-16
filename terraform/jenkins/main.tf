@@ -32,7 +32,7 @@ resource "aws_iam_role_policy_attachment" "push_to_ecr" {
 
 resource "aws_iam_role" "ec2_web_server_role" {
   assume_role_policy = file("./assumerolepolicy.json")
-  name               = "ServiceRoleForEC2WithCodeCommit"
+  name               = "ServiceRoleForEC2WithCodeCommitAndEcr"
 }
 
 resource "aws_iam_instance_profile" "test_profile" {
