@@ -35,3 +35,8 @@
         - workflow-aggregator
         - perfpublisher
         - github
+        - docker-workflow
+        - docker-commons
+        - docker
+        - docker-plugin
+
