@@ -2,7 +2,7 @@
 multibranchPipelineJob('example') {
     branchSources {
         git {
-            id('1234567777') // IMPORTANT: use a constant and unique identifier
+            id('1234567777')
             remote('https://github.com/wqhhust/javatest.git')
             includes('m*')
         }
