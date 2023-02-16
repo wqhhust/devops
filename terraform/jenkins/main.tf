@@ -19,8 +19,14 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_iam_role_policy_attachment" "code_commit_write" {
+  # Just for test, so used a powerful policy, in produciton need to use least privilege
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
-  # This is the aws_iam_role the policy will attach to
+  role = aws_iam_role.ec2_web_server_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "push_to_ecr" {
+  # Just for test, so used a powerful policy, in produciton need to use least privilege
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
   role = aws_iam_role.ec2_web_server_role.name
 }
 
@@ -97,6 +103,13 @@ resource "local_file" "inventory_for_ansible" {
   file_permission="600"
 }
 
+resource "local_file" "init_jenkins_groovy" {
+  filename = "jenkins_config/init_jenkins.groovy"
+  content  = templatefile("jenkins_config/init_jenkins.groovy.template", {
+    jenkins_admin_password = var.jenkins_admin_password
+    jenkins_testuser_password = var.jenkins_testuser_password
+  })
+}
 
 resource "local_file" "ssh_to_jenkins" {
   filename = "ssh_to_jenkins"
