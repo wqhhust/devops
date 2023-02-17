@@ -109,6 +109,7 @@ resource "aws_alb_target_group" "group_1" {
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.default.id
   stickiness {
+    enabled = false
     type = "lb_cookie"
   }
   # Alter the destination of the health check to be the login page.
@@ -154,6 +155,10 @@ output subnets {
   ]
 }
 
-output url {
+output ec2_url {
   value = [for key, value in aws_instance.webs: "${key}:   http://${value.public_ip}:80"]
+}
+
+output alb_url {
+  value = "http://${aws_alb.demo_alb.dns_name}"
 }
