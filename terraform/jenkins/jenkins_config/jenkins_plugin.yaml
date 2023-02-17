@@ -13,6 +13,8 @@ plugins:
   - artifactId: credentials
   - artifactId: credentials-binding
   - artifactId: display-url-api
+  - artifactId: docker-workflow
+  - artifactId: docker-plugin
   - artifactId: durable-task
   - artifactId: echarts-api
   - artifactId: email-ext
