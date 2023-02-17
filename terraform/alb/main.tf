@@ -23,9 +23,6 @@ data "aws_subnets" "public" {
   }
 }
 
-# resource "aws_route53_zone" "zone" {
-#   name = "daniel.com"
-# }
 
 
 data "aws_ami" "ubuntu" {
@@ -131,29 +128,33 @@ resource "aws_alb_listener" "listener_http" {
   }
 }
 
-# resource "aws_route53_record" "route53" {
-#   name = "terraform.${var.route53_hosted_zone_name}"
-#   type = "A"
 
-#   zone_id = aws_route53_zone.zone.id
-
-#   alias {
-#     name                   = "${aws_alb.demo_alb.dns_name}"
-#     zone_id                = "${aws_alb.demo_alb.zone_id}"
-#     evaluate_target_health = true
-#   }
-
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
-
-
-output subnets {
-  value = [
-    for v in data.aws_subnets.public.ids : v
-  ]
+resource "aws_route53_zone" "zone" {
+  name = "daniel.com"
 }
+
+resource "aws_route53_record" "route53" {
+  name = "terraform.${var.route53_hosted_zone_name}"
+  type = "A"
+
+  zone_id = aws_route53_zone.zone.id
+
+  alias {
+    name                   = "${aws_alb.demo_alb.dns_name}"
+    zone_id                = "${aws_alb.demo_alb.zone_id}"
+    evaluate_target_health = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# output subnets {
+#   value = [
+#     for v in data.aws_subnets.public.ids : v
+#   ]
+# }
 
 output ec2_url {
   value = [for key, value in aws_instance.webs: "${key}:   http://${value.public_ip}:80"]

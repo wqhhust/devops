@@ -1,0 +1,17 @@
+#+title: Readme
+
+* purpose
+- create 3 web servers, each on one EC2, whose http content are primary, replica_1 and replica_2
+- create a target group binding to these 3 EC2, which stickness as false to test how it work
+- create a alb, and add a rule binding to the target group
+
+  after apply the plan, the output is like
+  #+begin_src bash
+alb_url = "http://demo-alb-619012139.us-east-2.elb.amazonaws.com"
+ec2_url = [
+  "primary:   http://18.118.136.201:80",
+  "replica_1:   http://3.21.128.112:80",
+  "replica_2:   http://18.223.149.21:80",
+]
+  #+end_src
+  Then the url could be used for verify.
