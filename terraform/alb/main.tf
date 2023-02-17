@@ -95,9 +95,10 @@ resource "aws_security_group" "daniel_sg" {
 }
 
 resource "aws_lb_target_group_attachment" "test" {
-  count = length(var.web_servers_list)
+  for_each = toset(var.web_servers_list)
+
   target_group_arn = aws_alb_target_group.group_1.arn
-  target_id        = aws_instance.webs[count.index].id
+  target_id        = aws_instance.webs[each.value].id
   port             = 80
 }
 
@@ -154,5 +155,5 @@ output subnets {
 }
 
 output url {
-  value = aws_instance.webs[*].public_id
+  value = [for key, value in aws_instance.webs: "${key}:   http://${value.public_ip}:80"]
 }
