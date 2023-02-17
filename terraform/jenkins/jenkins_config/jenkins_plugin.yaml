@@ -26,6 +26,7 @@ plugins:
   - artifactId: handlebars
   - artifactId: jackson2-api
   - artifactId: jaxb
+  - artifactId: job-dsl
   - artifactId: jdk-tool
   - artifactId: jquery3-api
   - artifactId: jsch

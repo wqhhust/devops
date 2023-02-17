@@ -6,7 +6,7 @@ jobs:
           branchSources {
               git {
                   id = 'configuration-as-code'
-                  remote('https://github.com/jenkinsci/configuration-as-code-plugin.git')
+                  remote('https://github.com/wqhhust/javatest.git')
               }
           }
       }
