@@ -48,5 +48,20 @@ pipeline {
         }
       }
     }
+
+    stage("Get approval") {
+        options {
+            timeout(time:2, unit: 'MINUTES')
+        }
+        steps {
+            input "Pleaes approval to deploy the new build"
+        }
+    }
+
+    stage("Deploy") {
+        steps {
+            echo "TODO: deploy to AWS ECS"
+        }
+    }
   }
 }
