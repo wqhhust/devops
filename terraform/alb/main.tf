@@ -6,6 +6,12 @@ variable route53_hosted_zone_name {
   type = string
   default = "default_zone.com"
 }
+
+variable web_servers_list {
+  type = list
+  default = ["primary", "replica_1", "replica_2"]
+}
+
 data "aws_vpc" "default" {
   default = true
 }
@@ -37,7 +43,8 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"] # Canonical
 }
-resource "aws_instance" "web1" {
+resource "aws_instance" "webs" {
+  for_each = toset(var.web_servers_list)
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   user_data = <<EOF
@@ -47,15 +54,15 @@ apt install -y apache2
 systemctl start apache2
 systemctl enable apache2
 echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
+echo "<h1>${each.value}</h1>" > /var/www/html/index.html
 EOF
 
 #  key_name               = "daniel_key"
   vpc_security_group_ids = [aws_security_group.daniel_sg.id]
-#  user_data              = file("install_web1.sh")
 #  iam_instance_profile   = aws_iam_instance_profile.test_profile.name
 
   tags = {
-    Name = "web1"
+    Name = "web"
   }
 }
 
@@ -88,8 +95,9 @@ resource "aws_security_group" "daniel_sg" {
 }
 
 resource "aws_lb_target_group_attachment" "test" {
+  count = length(var.web_servers_list)
   target_group_arn = aws_alb_target_group.group_1.arn
-  target_id        = aws_instance.web1.id
+  target_id        = aws_instance.webs[count.index].id
   port             = 80
 }
 
@@ -104,7 +112,7 @@ resource "aws_alb_target_group" "group_1" {
   }
   # Alter the destination of the health check to be the login page.
   health_check {
-    path = "/login"
+    path = "/"
     port = 80
   }
 }
@@ -143,4 +151,8 @@ output subnets {
   value = [
     for v in data.aws_subnets.public.ids : v
   ]
+}
+
+output url {
+  value = aws_instance.webs[*].public_id
 }
