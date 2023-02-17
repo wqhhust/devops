@@ -1,3 +1,4 @@
+# https://jenkinsci.github.io/job-dsl-plugin/#path/multibranchPipelineJob
 jenkins:
   systemMessage: "Simple seed job example"
 jobs:

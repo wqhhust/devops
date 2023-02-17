@@ -3,6 +3,7 @@
     - prod
   vars:
     home_dir: /home/ubuntu
+    jenkins_home: /var/lib/jenkins
 
   tasks:
 
@@ -11,12 +12,12 @@
       lineinfile:
         path: /etc/default/jenkins
         regexp: ".*-Djava.awt.headless=true.*"
-        line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djenkins.install.runSetupWizard=false'
+        line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Dcasc.jenkins.config={{ jenkins_home  }} .net.preferIPv4Stack=true -Djenkins.install.runSetupWizard=false'
         state: present
 
     - name: copy jenkins init file
       copy:
-        dest: "/var/lib/jenkins/init.groovy"
+        dest: "{{ jenkins_home }}/init.groovy"
         src: "jenkins_config/init_jenkins.groovy"
 
     - name: Copy the jenkins plugin yaml file
@@ -36,13 +37,13 @@
 
     - name: install jenkins plugins
       become: yes
-      command: "java -jar {{ home_dir }}/jenkins-plugin-manager.jar --plugin-file plugins.yaml --plugin-download-directory /var/lib/jenkins/plugins"
+      command: "java -jar {{ home_dir }}/jenkins-plugin-manager.jar --plugin-file plugins.yaml --plugin-download-directory {{ jenkins_home }}/plugins"
 
 
     - name: update jenkins ownership # since download manager will store file as root
       become: yes
       file:
-        path: /var/lib/jenkins
+        path: {{ jenkins_home }}
         owner: jenkins
         group: jenkins
         state: directory
