@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-2"
+}
+
 variable route53_hosted_zone_name {
   type = string
   default = "default_zone.com"
@@ -13,8 +17,46 @@ data "aws_subnets" "public" {
   }
 }
 
-resource "aws_route53_zone" "zone" {
-  name = "daniel.com"
+# resource "aws_route53_zone" "zone" {
+#   name = "daniel.com"
+# }
+
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+resource "aws_instance" "web1" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.micro"
+  user_data = <<EOF
+#!/bin/bash
+apt update -y
+apt install -y apache2
+systemctl start apache2
+systemctl enable apache2
+echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
+EOF
+
+#  key_name               = "daniel_key"
+  vpc_security_group_ids = [aws_security_group.daniel_sg.id]
+#  user_data              = file("install_web1.sh")
+#  iam_instance_profile   = aws_iam_instance_profile.test_profile.name
+
+  tags = {
+    Name = "web1"
+  }
 }
 
  resource "aws_alb" "demo_alb" {
@@ -29,7 +71,7 @@ resource "aws_security_group" "daniel_sg" {
   name = "daniel_sg_demo"
   dynamic "ingress" {
     iterator = port
-    for_each = [80,8080]
+    for_each = [22,80,8080]
     content {
       from_port = port.value
       to_port = port.value
@@ -43,6 +85,12 @@ resource "aws_security_group" "daniel_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_lb_target_group_attachment" "test" {
+  target_group_arn = aws_alb_target_group.group_1.arn
+  target_id        = aws_instance.web1.id
+  port             = 80
 }
 
 
@@ -61,6 +109,7 @@ resource "aws_alb_target_group" "group_1" {
   }
 }
 
+
 resource "aws_alb_listener" "listener_http" {
   load_balancer_arn = aws_alb.demo_alb.arn # "${aws_alb.alb.arn}"
   port              = "80"
@@ -72,22 +121,22 @@ resource "aws_alb_listener" "listener_http" {
   }
 }
 
-resource "aws_route53_record" "route53" {
-  name = "terraform.${var.route53_hosted_zone_name}"
-  type = "A"
+# resource "aws_route53_record" "route53" {
+#   name = "terraform.${var.route53_hosted_zone_name}"
+#   type = "A"
 
-  zone_id = aws_route53_zone.zone.id
+#   zone_id = aws_route53_zone.zone.id
 
-  alias {
-    name                   = "${aws_alb.demo_alb.dns_name}"
-    zone_id                = "${aws_alb.demo_alb.zone_id}"
-    evaluate_target_health = true
-  }
+#   alias {
+#     name                   = "${aws_alb.demo_alb.dns_name}"
+#     zone_id                = "${aws_alb.demo_alb.zone_id}"
+#     evaluate_target_health = true
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 
 output subnets {
