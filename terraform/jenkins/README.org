@@ -2,10 +2,19 @@
    1. Provision an EC2 with ubuntu 20.04 image, and use cloud-init (user_data) to install jenkins, aws and ansible.
       It will also create a private key and inventory file for ansible.
       #+begin_src bash
-      aws configure # to set up the credential to connect to AWS
-      terraform init
-      terraform change
-      terraform apply
+        aws configure # to set up the credential to connect to AWS
+        cd /tmp
+        git checkout https://github.com/wqhhust/devops.git
+        cd /tmp/devops/terraform/jenkins
+        alias t=terraform
+        # need to first run aws configure
+        t init
+        t plan
+        t apply
+        # sleep 5 mins to wait for jenkins installation on EC2
+        sleep 300
+        # need to install ansible
+        ansible-playbook jenkins_plugin.yml
       #+end_src
 
    2. Copy file from local to remote EC2

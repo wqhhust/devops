@@ -8,5 +8,7 @@ alias t=terraform
 t init
 t plan
 t apply
+# sleep 5 mins to wait for jenkins installation on EC2
+sleep 300
 # need to install ansible
 ansible-playbook jenkins_plugin.yml
