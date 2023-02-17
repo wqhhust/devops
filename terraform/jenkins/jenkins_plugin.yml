@@ -11,14 +11,19 @@
       become: yes
       lineinfile:
         path: /etc/default/jenkins
-        regexp: ".*-Djava.awt.headless=true.*"
-        line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Dcasc.jenkins.config={{ jenkins_home  }} .net.preferIPv4Stack=true -Djenkins.install.runSetupWizard=false'
+        regexp: ".*-Djava.awt.headless=true.*"  # casc.jenkins.config define the file used by code as configuration
+        line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Dcasc.jenkins.config={{ jenkins_home  }}/jenkins.yaml .net.preferIPv4Stack=true -Djenkins.install.runSetupWizard=false'
         state: present
 
     - name: copy jenkins init file
       copy:
         dest: "{{ jenkins_home }}/init.groovy"
         src: "jenkins_config/init_jenkins.groovy"
+
+    - name: copy code as configruation file
+      copy:
+        dest: "{{ jenkins_home }}/jenkins.yaml"
+        src: "jenkins_config/job_define_jcasc.yaml"
 
     - name: Copy the jenkins plugin yaml file
       copy:
@@ -43,7 +48,7 @@
     - name: update jenkins ownership # since download manager will store file as root
       become: yes
       file:
-        path: {{ jenkins_home }}
+        path: "{{ jenkins_home }}"
         owner: jenkins
         group: jenkins
         state: directory
