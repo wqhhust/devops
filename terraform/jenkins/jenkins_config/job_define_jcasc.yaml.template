@@ -7,7 +7,7 @@ jobs:
           branchSources {
               git {
                   id = 'configuration-as-code'
-                  remote('https://github.com/wqhhust/javatest.git')
+                  remote("${github_url}")
               }
           }
       }

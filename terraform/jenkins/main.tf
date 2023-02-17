@@ -111,6 +111,14 @@ resource "local_file" "init_jenkins_groovy" {
   })
 }
 
+
+resource "local_file" "init_jenkins_casc" {
+  filename = "jenkins_config/job_define_jcasc.yaml"
+  content  = templatefile("jenkins_config/job_define_jcasc.yaml.template", {
+    github_url = var.github_url
+  })
+}
+
 resource "local_file" "ssh_to_jenkins" {
   filename = "ssh_to_jenkins"
   content  = "ssh -i daniel_key.pem  -oStrictHostKeyChecking=no ubuntu@${aws_instance.jenkins.public_ip}"

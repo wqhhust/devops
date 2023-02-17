@@ -15,6 +15,10 @@ variable "jenkins_testuser_password" {
   default = "test_password"
 }
 
+variable "github_url" {
+  type = string
+  default = "https://github.com/wqhhust/javatest.git"
+}
 variable "aws_ecr_url" {
   type = string
   default = "617815228888.dkr.ecr.us-east-1.amazonaws.com/danielsite"
