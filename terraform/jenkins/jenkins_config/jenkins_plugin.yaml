@@ -32,6 +32,7 @@ plugins:
   - artifactId: junit
   - artifactId: ldap
   - artifactId: lockable-resources
+  - artifactId: locale
   - artifactId: mailer
   - artifactId: matrix-auth
   - artifactId: matrix-project
