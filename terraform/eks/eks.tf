@@ -2,10 +2,9 @@ provider "aws" {
   region = "us-east-2"
 }
 
-
-resource "aws_eks_cluster" "example" {
+resource "aws_eks_cluster" "cluster" {
   # required
-  name     = "example"
+  name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks_cluster.arn
   vpc_config {
     subnet_ids = aws_subnet.example[*].id
@@ -20,17 +19,14 @@ resource "aws_eks_cluster" "example" {
   ]
 }
 
-data "aws_vpc" "selected" {
+data "aws_eks_cluster_auth" "cluster" {
+  name = var.eks_cluster_name
 }
 
 output "endpoint" {
-  value = aws_eks_cluster.example.endpoint
+  value = aws_eks_cluster.cluster.endpoint
 }
 
 output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.example.certificate_authority[0].data
-}
-
-output "vpc" {
-  value = data.aws_vpc.selected
+  value = aws_eks_cluster.cluster.certificate_authority[0].data
 }
