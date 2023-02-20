@@ -9,7 +9,7 @@ resource "aws_eks_node_group" "example" {
   }
 
   # optional
-  instance_types  = "t2.micro"
+  instance_types  = ["t2.micro"]
   node_group_name = "example"
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
