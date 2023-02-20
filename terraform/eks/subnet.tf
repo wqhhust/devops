@@ -3,6 +3,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_vpc" "example" {
+  cidr_block = "10.0.0.0/16"
 }
 
 resource "aws_subnet" "example" {
@@ -12,5 +13,5 @@ resource "aws_subnet" "example" {
   # optional
   count = 2
   # availability_zone = data.aws_availability_zones.available.names[count.index]
-  # cidr_block        = cidrsubnet(aws_vpc.example.cidr_block, 8, count.index)
+  cidr_block        = cidrsubnet(aws_vpc.example.cidr_block, 8, count.index)
 }

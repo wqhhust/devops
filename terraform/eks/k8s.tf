@@ -3,13 +3,6 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
   cluster_ca_certificate = base64decode(aws_eks_cluster.cluster.certificate_authority.0.data)
 }
-
-resource "kubernetes_namespace" "sample-nodejs" {
-  metadata {
-    name = "sample-nodejs"
-  }
-}
-
 resource "kubernetes_namespace" "test" {
   metadata {
     name = "nginx"
