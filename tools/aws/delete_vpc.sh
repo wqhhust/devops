@@ -1,5 +1,5 @@
 #!/bin/bash
-vpc_id="vpc-0d140d5a035213ffa"
+vpc_id="vpc-061aceae602c16ed9"
 
 # aws ec2 describe-internet-gateways --filters 'Name=attachment.vpc-id,Values='$vpc | grep InternetGatewayId
 # aws ec2 describe-subnets --filters 'Name=vpc-id,Values='$vpc | grep SubnetId
@@ -19,9 +19,7 @@ while read -r sg ; do
     # aws elbv2 describe-load-balancers
     #
     cmd="aws ec2 delete-security-group --group-id $sg"
-    echo $cmd
-    ($cmd)
-    #sh -c "echo '$cmd';$cmd"
+    sh -c "echo '$cmd';$cmd"
 done < <(aws ec2 describe-security-groups --filters 'Name=vpc-id,Values='$vpc_id \
     | jq -r '.SecurityGroups[].GroupId')
 
