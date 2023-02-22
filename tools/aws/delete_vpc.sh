@@ -17,7 +17,8 @@ vpc_id="vpc-061aceae602c16ed9"
 while read -r sg ; do
     # check albs using this security group
     # aws elbv2 describe-load-balancers
-    #
+    aws ec2 describe-network-interfaces --filters "Name=group-id, Values=$sg"|jq -r '.NetworkInterfaces[].NetworkInterfaceId'
+
     cmd="aws ec2 delete-security-group --group-id $sg"
     sh -c "echo '$cmd';$cmd"
 done < <(aws ec2 describe-security-groups --filters 'Name=vpc-id,Values='$vpc_id \
@@ -26,8 +27,7 @@ done < <(aws ec2 describe-security-groups --filters 'Name=vpc-id,Values='$vpc_id
 while read -r instance_id ; do
     cmd="aws ec2 terminate-instances --instance-ids $instance_id"
     sh -c "echo '$cmd';$cmd"
-done < <(aws ec2 describe-instances --filters 'Name=vpc-id,Values='$vpc_id \
-    | jq -r '.Reservations[].Instances[].InstanceId')
+done < <(aws ec2 describe-instances --filters 'Name=vpc-id,Values='$vpc_id \ | jq -r '.Reservations[].Instances[].InstanceId')
 
 
 while read -r rt_id ; do
