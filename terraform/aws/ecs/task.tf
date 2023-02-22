@@ -3,7 +3,7 @@ resource "aws_ecs_task_definition" "test" {
   container_definitions = jsonencode([
     {
       name      = "first"
-      image     = "service-first"
+      image     = "nginx"
       cpu       = 10
       memory    = 512
       essential = true
