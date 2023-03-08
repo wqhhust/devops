@@ -1,0 +1,11 @@
+unclassified:
+  location:
+    url: http://server_ip:8080/
+
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+       - id: jenkins-admin
+         password: butler
